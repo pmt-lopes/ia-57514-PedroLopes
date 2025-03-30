@@ -1,0 +1,12 @@
+# Unity-generated files
+Library/
+Temp/
+Logs/
+Obj/
+UserSettings/
+Packages/*
+!Packages/manifest.json
+!Packages/packages-lock.json
+.vs/
+.idea/
+.DS_Store
