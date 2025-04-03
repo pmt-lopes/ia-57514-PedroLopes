@@ -9,19 +9,23 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private Rigidbody rb;
     private MovingPlatform currentPlatform;
+    private Animator anim;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
     {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
+        bool isMoving = horizontal != 0 || vertical != 0;
 
         // Sprinting
-        float speed = moveSpeed * (Input.GetKey(KeyCode.LeftShift) ? sprintMultiplier : 1f);
+        bool isRunning = isMoving && Input.GetKey(KeyCode.LeftShift);
+        float speed = moveSpeed * (isRunning ? sprintMultiplier : 1f);
 
         // Moving
         Vector3 moveDirection = transform.forward * vertical + transform.right * horizontal;
@@ -38,6 +42,17 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
+            anim.SetBool("jump", true);
+        }
+
+        // Set Animator Booleans
+        anim.SetBool("walk", isMoving && !isRunning);
+        anim.SetBool("run", isRunning);
+
+        if (!isMoving) // If not moving, disable walking and running
+        {
+            anim.SetBool("walk", false);
+            anim.SetBool("run", false);
         }
     }
 
@@ -47,11 +62,13 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+            anim.SetBool("jump", false);
         }
         else if (collision.gameObject.CompareTag("MovingPlatform"))
         {
             isGrounded = true;
             currentPlatform = collision.gameObject.GetComponent<MovingPlatform>();
+            anim.SetBool("jump", false);
         }
     }
 

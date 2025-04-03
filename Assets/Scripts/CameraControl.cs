@@ -3,8 +3,9 @@ using UnityEngine;
 public class CameraControl : MonoBehaviour
 {
     public Transform player;
-    public float mouseSensitivity = 200f;
-    private float xRotation = 0f;
+    private float mouseSensitivity = 200f;
+    private float distanceFromPlayer = 4f;
+    private float height = 4f;
 
     void Start()
     {
@@ -14,12 +15,11 @@ public class CameraControl : MonoBehaviour
     void Update()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        //player.Rotate(Vector3.up * mouseX);
 
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        player.Rotate(Vector3.up * mouseX);
+        Vector3 targetPosition = player.position - player.forward * distanceFromPlayer + Vector3.up * height;
+
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5f);
     }
 }
