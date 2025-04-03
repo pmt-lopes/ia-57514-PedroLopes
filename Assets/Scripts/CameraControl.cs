@@ -3,23 +3,20 @@ using UnityEngine;
 public class CameraControl : MonoBehaviour
 {
     public Transform player;
-    private float mouseSensitivity = 200f;
-    private float distanceFromPlayer = 4f;
-    private float height = 4f;
+    public float distanceFromPlayer = 4f;
+    public float height = 4f;
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
-    void Update()
+    void LateUpdate()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        Vector3 offset = player.rotation * new Vector3(0, height, -distanceFromPlayer);
+        transform.position = player.position + offset;
 
-        //player.Rotate(Vector3.up * mouseX);
-
-        Vector3 targetPosition = player.position - player.forward * distanceFromPlayer + Vector3.up * height;
-
-        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 5f);
+        transform.LookAt(player.position + Vector3.up * height * 0.5f);
     }
 }

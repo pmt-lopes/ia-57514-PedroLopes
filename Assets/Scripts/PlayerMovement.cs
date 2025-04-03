@@ -23,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         bool isMoving = horizontal != 0 || vertical != 0;
 
+        float mouseX = Input.GetAxis("Mouse X");
+        transform.Rotate(Vector3.up * mouseX * 200f * Time.deltaTime);
+
         // Sprinting
         bool isRunning = isMoving && Input.GetKey(KeyCode.LeftShift);
         float speed = moveSpeed * (isRunning ? sprintMultiplier : 1f);
