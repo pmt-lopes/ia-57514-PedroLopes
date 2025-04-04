@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
     private Rigidbody rb;
     private MovingPlatform currentPlatform;
+    private MovingWall currentWall;
     private Animator anim;
 
     void Start()
@@ -38,6 +39,12 @@ public class PlayerMovement : MonoBehaviour
         if (currentPlatform != null)
         {
             transform.position += currentPlatform.GetPlatformMovement();
+        }
+
+        // Apply wall movement if colliding with one
+        if (currentWall != null)
+        {
+            transform.position += currentWall.GetWallMovement();
         }
 
         // Jumping
@@ -72,6 +79,12 @@ public class PlayerMovement : MonoBehaviour
             isGrounded = true;
             currentPlatform = collision.gameObject.GetComponent<MovingPlatform>();
             anim.SetBool("jump", false);
+            Debug.Log(currentPlatform);
+        }
+        else if (collision.gameObject.CompareTag("MovingWall"))
+        {
+            currentWall = collision.gameObject.GetComponent<MovingWall>();
+            Debug.Log(currentWall);
         }
     }
 
@@ -80,6 +93,10 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("MovingPlatform"))
         {
             currentPlatform = null;
+        }
+        else if (collision.gameObject.CompareTag("MovingWall"))
+        {
+            currentWall = null;
         }
     }
 
