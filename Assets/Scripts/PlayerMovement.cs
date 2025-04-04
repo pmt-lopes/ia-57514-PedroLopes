@@ -79,12 +79,10 @@ public class PlayerMovement : MonoBehaviour
             isGrounded = true;
             currentPlatform = collision.gameObject.GetComponent<MovingPlatform>();
             anim.SetBool("jump", false);
-            Debug.Log(currentPlatform);
         }
         else if (collision.gameObject.CompareTag("MovingWall"))
         {
             currentWall = collision.gameObject.GetComponent<MovingWall>();
-            Debug.Log(currentWall);
         }
     }
 
