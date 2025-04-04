@@ -42,4 +42,10 @@ public class GameManager : MonoBehaviour
     {
         heartText.text = "x" + currentHealth;
     }
+
+    public void AddLife(int lives)
+    {
+        currentHealth += lives;
+        UpdateHealthUI();
+    }
 }

@@ -6,7 +6,11 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 5f;
     public float jumpForce = 7f;
     public float sprintMultiplier = 1.5f;
+
     private bool isGrounded;
+    private bool canDoubleJump = false;
+    private bool hasDoubleJump = false;
+
     private Rigidbody rb;
     private MovingPlatform currentPlatform;
     private MovingWall currentWall;
@@ -48,11 +52,21 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Jumping
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump"))
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            isGrounded = false;
-            anim.SetBool("jump", true);
+            if (isGrounded)
+            {
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                isGrounded = false;
+                canDoubleJump = hasDoubleJump;
+                anim.SetBool("jump", true);
+            }
+            else if (canDoubleJump)
+            {
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                canDoubleJump = false;
+                anim.SetBool("doubleJump", true);
+            }
         }
 
         // Set Animator Booleans
@@ -105,5 +119,17 @@ public class PlayerMovement : MonoBehaviour
             gameManager.TakeDamage(1);
         }
     }
+
+    public void EnableDoubleJump()
+    {
+        hasDoubleJump = true;
+    }
+
+    public void DoubleJumpComplete()
+    {
+        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+        anim.SetBool("doubleJump", false);
+    }
+
 }
 
