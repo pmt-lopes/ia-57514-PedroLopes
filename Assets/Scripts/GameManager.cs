@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        respawnPoint = new Vector3(0, 5, 60);
+        respawnPoint = new Vector3(0, 5, 235);
         currentHealth = maxHealth;
         UpdateHealthUI();
     }

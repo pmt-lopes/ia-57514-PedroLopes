@@ -63,9 +63,11 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (canDoubleJump)
             {
-                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                rb.AddForce(Vector3.up * jumpForce * 1.5f, ForceMode.Impulse);
                 canDoubleJump = false;
-                anim.SetBool("doubleJump", true);
+                anim.SetBool("jump", false);
+                anim.Play("Jump", 0, 0); // restart animation
+                anim.SetBool("jump", true);
             }
         }
 
@@ -123,12 +125,6 @@ public class PlayerMovement : MonoBehaviour
     public void EnableDoubleJump()
     {
         hasDoubleJump = true;
-    }
-
-    public void DoubleJumpComplete()
-    {
-        transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
-        anim.SetBool("doubleJump", false);
     }
 
 }
